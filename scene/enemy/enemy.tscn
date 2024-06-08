@@ -1,0 +1,71 @@
+[gd_scene load_steps=12 format=3 uid="uid://c2pq7iafat3n"]
+
+[ext_resource type="Script" path="res://scripts/enemy/enemy_scene.gd" id="1_rs6ca"]
+[ext_resource type="Texture2D" uid="uid://be5qbemp7viy4" path="res://resouces/ships/ship (18).png" id="2_wjtwx"]
+[ext_resource type="Script" path="res://components/enemy_ai/behaviour_tree.gd" id="3_m1yan"]
+[ext_resource type="Script" path="res://components/enemy_ai/selector.gd" id="4_61cp4"]
+[ext_resource type="Script" path="res://components/enemy_ai/sequence.gd" id="5_du6qu"]
+[ext_resource type="Script" path="res://components/enemy_ai/leaf_nodes/follow_through.gd" id="6_q2dnq"]
+[ext_resource type="Script" path="res://components/enemy_ai/leaf_nodes/player_near_by.gd" id="6_rdipr"]
+[ext_resource type="Script" path="res://components/enemy_ai/leaf_nodes/attack.gd" id="7_l7g3c"]
+[ext_resource type="Script" path="res://components/enemy_ai/leaf_nodes/patrol.gd" id="8_6ux5j"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3hj62"]
+radius = 149.03
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c8ibf"]
+radius = 325.444
+
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("behaviour_ai")]
+script = ExtResource("1_rs6ca")
+behaviour_ai = NodePath("BehaviourAi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_wjtwx")
+
+[node name="PatrolingZone" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="AttackRange" type="CollisionShape2D" parent="PatrolingZone"]
+position = Vector2(1, 2)
+scale = Vector2(5.28, 5.28)
+shape = SubResource("CircleShape2D_3hj62")
+
+[node name="FollowThroughZone" type="Area2D" parent="."]
+
+[node name="FollowThroughRange" type="CollisionShape2D" parent="FollowThroughZone"]
+scale = Vector2(4.44, 4.44)
+shape = SubResource("CircleShape2D_c8ibf")
+
+[node name="BehaviourAi" type="Node" parent="."]
+script = ExtResource("3_m1yan")
+
+[node name="Selector" type="Node" parent="BehaviourAi"]
+script = ExtResource("4_61cp4")
+
+[node name="AttackSequence" type="Node" parent="BehaviourAi/Selector"]
+script = ExtResource("5_du6qu")
+
+[node name="IsFollowThrough" type="Node" parent="BehaviourAi/Selector/AttackSequence"]
+script = ExtResource("6_q2dnq")
+
+[node name="IsPlayerNearBy" type="Node" parent="BehaviourAi/Selector/AttackSequence"]
+script = ExtResource("6_rdipr")
+
+[node name="Attack" type="Node" parent="BehaviourAi/Selector/AttackSequence"]
+script = ExtResource("7_l7g3c")
+
+[node name="PatrolSelector" type="Node" parent="BehaviourAi/Selector"]
+script = ExtResource("4_61cp4")
+
+[node name="Patrol" type="Node" parent="BehaviourAi/Selector/PatrolSelector"]
+script = ExtResource("8_6ux5j")
+
+[connection signal="body_entered" from="PatrolingZone" to="." method="_on_patroling_zone_body_entered"]
+[connection signal="body_exited" from="PatrolingZone" to="." method="_on_patroling_zone_body_exited"]
+[connection signal="body_entered" from="FollowThroughZone" to="." method="_on_follow_through_zone_body_entered"]
+[connection signal="body_exited" from="FollowThroughZone" to="." method="_on_follow_through_zone_body_exited"]
+[connection signal="move_towards_player" from="BehaviourAi/Selector/AttackSequence/IsFollowThrough" to="." method="_on_is_follow_through_move_towards_player"]
+[connection signal="process_attack_player" from="BehaviourAi/Selector/AttackSequence/Attack" to="." method="_on_attack_process_attack_player"]
+[connection signal="movement_progresser" from="BehaviourAi/Selector/PatrolSelector/Patrol" to="." method="_on_patrol_movement_progresser"]
