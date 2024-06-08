@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://be6epem4rh4ai"
+path="res://.godot/imported/6-Mediterranean Adventure - Main theme (Variant).mp3-6ce735e99083a4c54588c2011917b363.mp3str"
+
+[deps]
+
+source_file="res://resouces/music/MEDITERRANEAN ADVENTURE OST/6-Mediterranean Adventure - Main theme (Variant).mp3"
+dest_files=["res://.godot/imported/6-Mediterranean Adventure - Main theme (Variant).mp3-6ce735e99083a4c54588c2011917b363.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

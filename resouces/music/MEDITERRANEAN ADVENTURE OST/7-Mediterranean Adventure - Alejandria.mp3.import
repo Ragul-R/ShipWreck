@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cfw1b32uclcwe"
+path="res://.godot/imported/7-Mediterranean Adventure - Alejandria.mp3-2c003362d8a52a7ef80ca645399394d5.mp3str"
+
+[deps]
+
+source_file="res://resouces/music/MEDITERRANEAN ADVENTURE OST/7-Mediterranean Adventure - Alejandria.mp3"
+dest_files=["res://.godot/imported/7-Mediterranean Adventure - Alejandria.mp3-2c003362d8a52a7ef80ca645399394d5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
