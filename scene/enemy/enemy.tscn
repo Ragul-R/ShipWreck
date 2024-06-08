@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://c2pq7iafat3n"]
+[gd_scene load_steps=13 format=3 uid="uid://c2pq7iafat3n"]
 
 [ext_resource type="Script" path="res://scripts/enemy/enemy_scene.gd" id="1_rs6ca"]
+[ext_resource type="Script" path="res://scripts/base/enemy.gd" id="2_is834"]
 [ext_resource type="Texture2D" uid="uid://be5qbemp7viy4" path="res://resouces/ships/ship (18).png" id="2_wjtwx"]
 [ext_resource type="Script" path="res://components/enemy_ai/behaviour_tree.gd" id="3_m1yan"]
 [ext_resource type="Script" path="res://components/enemy_ai/selector.gd" id="4_61cp4"]
@@ -16,9 +17,13 @@ radius = 149.03
 [sub_resource type="CircleShape2D" id="CircleShape2D_c8ibf"]
 radius = 325.444
 
-[node name="Enemy" type="Node2D" node_paths=PackedStringArray("behaviour_ai")]
+[node name="Enemy" type="Node2D" node_paths=PackedStringArray("behaviour_ai", "enemy")]
 script = ExtResource("1_rs6ca")
 behaviour_ai = NodePath("BehaviourAi")
+enemy = NodePath("enemy_script")
+
+[node name="enemy_script" type="Node" parent="."]
+script = ExtResource("2_is834")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_wjtwx")
