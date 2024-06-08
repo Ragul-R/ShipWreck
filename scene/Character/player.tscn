@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dhdfp67258irg"]
+[gd_scene load_steps=5 format=3 uid="uid://dhdfp67258irg"]
 
 [ext_resource type="Script" path="res://scene/Character/player.gd" id="1_541gd"]
 [ext_resource type="Texture2D" uid="uid://fgg532kw7w5d" path="res://resouces/ship (2).png" id="2_c6bi4"]
@@ -14,6 +14,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u6e0r"]
+radius = 26.0
+height = 96.0
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_541gd")
 
@@ -23,6 +27,9 @@ rotation = -1.5708
 sprite_frames = SubResource("SpriteFrames_rp3tq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3, 2)
+rotation = -1.58095
+shape = SubResource("CapsuleShape2D_u6e0r")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.7, 0.7)

@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var speed = 350  # move speed in pixels/sec
+var speed = 450  # move speed in pixels/sec
 var rotation_speed = 1.5  # turning speed in radians/sec
 
 func _physics_process(delta):
