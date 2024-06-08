@@ -6,15 +6,12 @@ var direction = -1
 
 
 @export var behaviour_ai: BehaviourTree
-
+@export var enemy: Enemy
 
 var result: BehaviourTreeResults
 var blackboard: Blackboard
 
-#@onready var ray_cast_right = $RayCastRight
-#@onready var ray_cast_left = $RayCastLeft
 @onready var animated_sprite = $AnimatedSprite2D
-@onready var enemy: Enemy = Enemy.new()
 const BULLET: PackedScene = preload("res://scene/enemy/bullet.tscn")
 
 
@@ -22,10 +19,12 @@ const BULLET: PackedScene = preload("res://scene/enemy/bullet.tscn")
 
 @export var follow_offset: Vector2 = Vector2(100, 100)
 @export var smoothing_factor: float = 0.5
-
 @export var attraction_force: float = 40.0
 
-var ray_cast: RayCast2D
+
+var can_fire = true
+var next_fire_time = 0
+var fire_rate = 1 # Bullets per second
 
 
 
@@ -33,13 +32,6 @@ var ray_cast: RayCast2D
 func _ready():
 	result = BehaviourTreeResults.new()
 	blackboard = Blackboard.new()
-	ray_cast = RayCast2D.new()
-	ray_cast.enabled = true
-	ray_cast.exclude_parent = true
-	ray_cast.collide_with_areas = true
-	ray_cast.collide_with_bodies = true
-	ray_cast.target_position = Vector2(-50, 0)
-	add_child(ray_cast)
 	blackboard.data["parent_node"] = self
 	blackboard.data["is_on_attack_range"] = false
 	blackboard.data["is_on_follow_through_range"] = false
@@ -51,11 +43,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#if player:
-		#var direction = player.global_position - global_position
-		#rotation = direction.angle()
-		#print("dir ", direction)
-		
 	if player:
 		var movement_details = enemy.move_towards_player(
 			global_position,
@@ -78,26 +65,28 @@ func _process(delta):
 		result
 	)
 	
-	#if ray_cast_right.is_colliding():
-		#direction = -1
-		#animated_sprite.flip_h = true
-	#if ray_cast_left.is_colliding():
-		#direction = 1
-		#animated_sprite.flip_h = false
-		#
-				#
-	#position.x +=  ( direction * SPEED * delta)
 
 
 
-func _on_attack_process_attack_player():
-	print("Attackign Player")
+func spwan_bullet():
 	var direction = global_position.direction_to(player.global_position)
 	var new_bullet = BULLET.instantiate()
 	new_bullet.global_position = global_position
 	new_bullet.direction = direction
 	get_tree().current_scene.add_child(new_bullet)
 	enemy.manage_attack()
+
+func _on_attack_process_attack_player():
+	enemy.manage_attack()
+	if can_fire:
+		spwan_bullet()
+		can_fire = false
+		next_fire_time = max(next_fire_time, Time.get_ticks_msec() + (1.0 / fire_rate) * 1000)
+
+	if Time.get_ticks_msec() > next_fire_time:
+		can_fire = true
+
+	
 
 
 
