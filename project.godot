@@ -15,6 +15,10 @@ run/main_scene="res://scene/level/Level-1.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Music="*res://scene/music.tscn"
+
 [display]
 
 window/size/viewport_width=320
