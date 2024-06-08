@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://birdu0slcngyt"]
+
+[ext_resource type="AudioStream" uid="uid://u3txl8go7d1o" path="res://resouces/music/MEDITERRANEAN ADVENTURE OST/1-Mediterranean Adventure - Main theme.mp3" id="1_i7atb"]
+
+[node name="Music" type="AudioStreamPlayer2D"]
+stream = ExtResource("1_i7atb")
+autoplay = true
