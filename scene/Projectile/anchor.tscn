@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpweyoslwtkje"]
+
+[ext_resource type="Script" path="res://scene/Projectile/anchor.gd" id="1_imep4"]
+[ext_resource type="Texture2D" uid="uid://8ar8selwc4fo" path="res://resouces/anchor.png" id="1_jb6rx"]
+[ext_resource type="Texture2D" uid="uid://c0cqvaf0i8yia" path="res://resouces/link.png" id="2_qg8ro"]
+[ext_resource type="Script" path="res://scene/Projectile/Chain.gd" id="3_7nh4v"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pop3b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jb6rx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Anchor" type="Node2D"]
+script = ExtResource("1_imep4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_pop3b")
+
+[node name="Chain" type="Sprite2D" parent="."]
+texture_filter = 1
+texture_repeat = 2
+position = Vector2(6.24494e-12, -2.72975e-19)
+rotation = -1.5708
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_qg8ro")
+offset = Vector2(2.08165e-12, 2.08165e-12)
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 16, 2.08165e-12)
+script = ExtResource("3_7nh4v")
+
+[node name="RayCast2D" type="RayCast2D" parent="Chain"]
+position = Vector2(1.0301e-26, -1.24899e-11)
+scale = Vector2(2, 2)
+target_position = Vector2(2.08165e-12, 150)

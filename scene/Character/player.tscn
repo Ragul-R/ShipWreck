@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dhdfp67258irg"]
+[gd_scene load_steps=6 format=3 uid="uid://dhdfp67258irg"]
 
 [ext_resource type="Script" path="res://scene/Character/player.gd" id="1_541gd"]
 [ext_resource type="Texture2D" uid="uid://fgg532kw7w5d" path="res://resouces/ship (2).png" id="2_c6bi4"]
+[ext_resource type="PackedScene" uid="uid://dpweyoslwtkje" path="res://scene/Projectile/anchor.tscn" id="3_ry43m"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rp3tq"]
 animations = [{
@@ -14,15 +15,22 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0h6i8"]
+radius = 13.0333
+height = 57.8341
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_541gd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 rotation = -1.5708
+scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_rp3tq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_0h6i8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.7, 0.7)
@@ -31,5 +39,11 @@ position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 rotation_smoothing_enabled = true
 rotation_smoothing_speed = 7.0
-drag_horizontal_enabled = true
 drag_vertical_enabled = true
+
+[node name="Anchor" parent="." instance=ExtResource("3_ry43m")]
+
+[connection signal="hooked" from="Anchor/Chain" to="." method="_on_chain_hooked"]
+[connection signal="un_hooked" from="Anchor/Chain" to="." method="_on_chain_un_hooked"]
+
+[editable path="Anchor"]
