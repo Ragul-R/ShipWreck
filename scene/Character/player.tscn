@@ -1,16 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhdfp67258irg"]
+[gd_scene load_steps=14 format=3 uid="uid://dhdfp67258irg"]
 
+[ext_resource type="Shader" uid="uid://bbp3efqybvx0w" path="res://scene/Character/hitflash.tres" id="1_5s5d4"]
 [ext_resource type="Script" path="res://scene/Character/player.gd" id="1_541gd"]
-[ext_resource type="Texture2D" uid="uid://fgg532kw7w5d" path="res://resouces/ship (2).png" id="2_c6bi4"]
+[ext_resource type="Texture2D" uid="uid://ml0mbt0um3ta" path="res://scene/ship (2).png" id="2_w0wj3"]
+[ext_resource type="Texture2D" uid="uid://l2q7skwuqgab" path="res://resouces/ship (8).png" id="3_or73q"]
+[ext_resource type="Script" path="res://scene/Character/HurtBox.gd" id="3_xe65q"]
+[ext_resource type="Texture2D" uid="uid://dohpbe4vgn1br" path="res://resouces/ship (14).png" id="4_o2uru"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1x1cq"]
+shader = ExtResource("1_5s5d4")
+shader_parameter/enabled = false
+shader_parameter/Flash = Color(1, 1, 1, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rp3tq"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_c6bi4")
+"texture": ExtResource("2_w0wj3")
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_or73q")
+}],
+"loop": true,
+"name": &"half_hp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_o2uru")
+}],
+"loop": true,
+"name": &"low_hp",
 "speed": 5.0
 }]
 
@@ -18,13 +43,59 @@ animations = [{
 radius = 26.0
 height = 96.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ygt4l"]
+radius = 33.0
+height = 102.0
+
+[sub_resource type="Animation" id="Animation_8wsye"]
+resource_name = "hitflash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_w2xa6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r1atq"]
+_data = {
+"RESET": SubResource("Animation_w2xa6"),
+"hitflash": SubResource("Animation_8wsye")
+}
+
 [node name="Player" type="CharacterBody2D"]
+scale = Vector2(0.6, 0.6)
+collision_layer = 2
+collision_mask = 13
 script = ExtResource("1_541gd")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_1x1cq")
 rotation = -1.5708
 sprite_frames = SubResource("SpriteFrames_rp3tq")
+animation = &"low_hp"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-3, 2)
@@ -32,7 +103,6 @@ rotation = -1.58095
 shape = SubResource("CapsuleShape2D_u6e0r")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.7, 0.7)
 process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
@@ -40,3 +110,20 @@ rotation_smoothing_enabled = true
 rotation_smoothing_speed = 7.0
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 8
+script = ExtResource("3_xe65q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(-1, 1)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_ygt4l")
+
+[node name="HitFlashAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_r1atq")
+}
+
+[connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

@@ -16,7 +16,6 @@ func tick(
 ) -> void:
 	var is_on_attack_range = blackboard.data.get("is_on_attack_range")
 	if is_on_attack_range:
-		print("Result set to suceess")
 		result.set_success()
 		return
 	result.set_failure()
